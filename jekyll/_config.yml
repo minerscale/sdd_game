@@ -1,5 +1,0 @@
-theme: jekyll-theme-hacker
-exclude: [build-site.sh, token.txt]
-
-mermaid:
-  src: 'mermaid/mermaid.min.js'

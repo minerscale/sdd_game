@@ -77,7 +77,7 @@ class Engine:
     
         a_slice, b_slice = tuple(a_slices), tuple(b_slices)
 
-        # Print the slices with transparency
+        # Copy the slices with transparency
         for y in range(b_slice[0][0], b_slice[0][1]):
             for x in range(b_slice[1][0], b_slice[1][1]):
                 if (b[y][x] != transparent_char):
