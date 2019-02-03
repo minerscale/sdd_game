@@ -1,3 +1,4 @@
-itheme: jekyll-theme-hacker
-github: [metadata]
+theme: jekyll-theme-hacker
 
+mermaid:
+  src: 'mermaid/mermaid.min.js'

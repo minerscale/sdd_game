@@ -1,2 +1,2 @@
-## Game!
-Epic *and* cool
+# Game!
+I want to make a game
