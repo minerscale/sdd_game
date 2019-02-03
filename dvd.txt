@@ -1,0 +1,7 @@
+/------------------------\
+| DDDDD V       V DDDDD  |
+| D    D V     V  D    D |
+| D    D  V   V   D    D |
+| D    D   V V    D    D |
+| DDDDD     V     DDDDD  |
+\------------------------/
