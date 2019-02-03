@@ -56,3 +56,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+docs/_site/
+
+docs/Gemfile\.lock
