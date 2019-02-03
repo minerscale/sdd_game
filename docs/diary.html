@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=cf209f1f2d06e9260222024c79697a3216684732">
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>03/02/2019 - Getting It Rolling | sdd_game</title>
+<meta name="generator" content="Jekyll v3.7.4" />
+<meta property="og:title" content="03/02/2019 - Getting It Rolling" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A text-based RPG written in Python" />
+<meta property="og:description" content="A text-based RPG written in Python" />
+<meta property="og:site_name" content="sdd_game" />
+<script type="application/ld+json">
+{"@type":"WebPage","headline":"03/02/2019 - Getting It Rolling","url":"/diary.html","description":"A text-based RPG written in Python","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>sdd_game</h1>
+        <h2>A text-based RPG written in Python</h2>
+
+        <section id="downloads">
+          
+          <a href="http://github.com/minerscale/sdd_game" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h2 id="03022019---getting-it-rolling">03/02/2019 - Getting It Rolling</h2>
+
+<p>After a few hours of work I have setup the enviroment I am working in. I want to keep the dependencies thin. I think I can manage to only use <a href="http://www.numpy.org/">Numpy</a>. I have a good idea on how my game is supposed to draw to the screen. I have created a 2D array of strings to act as the framebuffer for the game. I have <em>borrowed</em> and modified a blit function from <a href="https://stackoverflow.com/">stack overflow</a>.</p>
+
+<p>As for this website’s functionality, I have taken care to have all the tools I need for creating the documentation. I have support for:</p>
+
+<p><strong>1.</strong> Syntax highlighted code blocks:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="s">'We have python syntax highlighting!'</span><span class="p">)</span> <span class="c"># Comment</span>
+</code></pre></div></div>
+
+<p><strong>2.</strong> Flowcharts:</p>
+
+<script src="mermaid/mermaid.min.js"></script>
+<div class="mermaid">
+graph LR
+    A[Square Rect] -- Link text --&gt; B((Circle))
+    A --&gt; C(Round Rect)
+    B --&gt; D{Rhombus}
+    C --&gt; D
+</div>
+
+<p><strong>3.</strong> Gantt diagrams:</p>
+
+<script src="mermaid/mermaid.min.js"></script>
+<div class="mermaid">
+gantt
+    title A Gantt Diagram
+    dateFormat  YYYY-MM-DD
+    section Section
+    A task           :a1, 2014-01-01, 30d
+    Another task     :after a1  , 20d
+    section Another
+    Task in sec      :2014-01-12  , 12d
+    another task      : 24d
+</div>
+
+<p><strong>4.</strong> Tables:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Column 1</th>
+      <th>Column 2</th>
+      <th>Column 3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="python highlighter-rouge">print('Code inside a table!')</code></td>
+      <td>cell 1b</td>
+      <td>cell 1c</td>
+    </tr>
+    <tr>
+      <td>cell 2a</td>
+      <td>cell 2b</td>
+      <td>cell 2c</td>
+    </tr>
+  </tbody>
+</table>
+
+      </section>
+    </div>
+
+    
+  </body>
+</html>

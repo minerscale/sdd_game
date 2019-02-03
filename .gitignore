@@ -61,4 +61,4 @@ docs/_site/
 
 docs/Gemfile\.lock
 
-docs/build-site\.sh
+jekyll/token\.txt
