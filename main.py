@@ -1,108 +1,179 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import numpy as np
 import sys
 
-from engine import Engine
+import maze
+import engine
 import image
+import enemy
+import battle
+import getch
+import inventory
 
-class Game(Engine):
-    def __init__(self):
-        Engine.__init__(self, 80, 23)
+import constants
 
-        self.man_pos_x = 30
-        self.man_pos_y = 5
+import random
 
-        self.dvd_pos_x = 0
-        self.dvd_pos_y = 0
-        self.dvd_speed_x = 1
-        self.dvd_speed_y = 1
-
-        # Images!
-        self.DVD = image.convert('dvd.txt')
-        self.orang = image.convert('orang.txt')
-        self.man = image.convert('man.txt')
-
-        # Text processing
-        self.prev_command = ''
-
-    def run(self, command):
-        # Do all the calculations and graphics
-        self.process_input(command)
-        self.move_dvd()
-        self.do_graphics()
-        self.draw()
-
-    def process_input(self, command):
+# Handle input from the terminal
+def process_input(command):
+    # Convert the command to lowercase
+    if (command.isupper()):
         command = command.lower()
-        if command == '':
-            command = self.prev_command
-        # Quit
-        if command in ('exit', 'quit'):
-            sys.exit()
-        # Movement
-        elif command == 'w':
-            self.move_man(0,-1)
+
+    # Is it ctrl-C or escape? Exit.
+    if command in ['\x1b','\x03']:
+        sys.exit()
+
+    # Quit
+    if command in ('exit', 'quit'):
+        sys.exit()
+
+    # Map state
+    elif constants.game_state['mode'] == 'main':
+        if command == 'w':
+            move_player (0, -1)
         elif command == 's':
-            self.move_man(0,1)
-        elif command == 'd':
-            self.move_man(1,0)
+            move_player (0, 1)
         elif command == 'a':
-            self.move_man(-1,0)
-        elif command in ('wd','dw'):
-            self.move_man(1,-1)
-        elif command in ('wa','aw'):
-            self.move_man(-1,-1)
-        elif command in ('sd','ds'):
-            self.move_man(1,1)
-        elif command in ('sa','as'):
-            self.move_man(-1,1)
+            move_player (-1, 0)
+        elif command == 'd':
+            move_player (1, 0)
+        elif command in ['e','i']:
+            constants.game_state['mode'] = 'bag'
+            constants.game_state['return_mode'] = 'main'
 
-        self.prev_command = command
+    # Movement in battle mode
+    elif constants.game_state['mode'] == 'battle':
+        if command == 'w':
+            battle.move_cursor(0)
+        elif command == 's':
+            battle.move_cursor(1)
+        elif command == 'a':
+            battle.move_cursor(2)
+        elif command == 'd':
+            battle.move_cursor(3)
+        elif command == ' ':
+            battle.select()
 
-    def do_graphics(self):
-        # Draw Orang
-        self.screen = self.blit(self.screen, self.orang.data, (2, 32))
+    # Bag inputs
+    elif constants.game_state['mode'] == 'bag':
+        if command == 'q':
+            constants.game_state['mode'] = constants.game_state['return_mode'] 
+            inventory.selected = 0
+        if command == 'w':
+            inventory.selected = max(inventory.selected - 1, 0)
+        if command == 's':
+            inventory.selected = min(inventory.selected + 1, len(inventory.loot_together) - 1)
+        if command == ' ':
+            inventory.select()
 
-        # Blit DVD logo
-        self.screen = self.blit(self.screen, self.DVD.data, (self.dvd_pos_y, self.dvd_pos_x))
+# Moves the player around the map
+def move_player(x, y):
+    global player_x
+    global player_y
 
-        self.screen = self.blit(self.screen, self.man.data, (self.man_pos_y, self.man_pos_x))
+    if maze.maze[1 + player_y + y][2*(1 + player_x + x)] != constants.FULL_CELL:
+        player_x += x
+        player_y += y
+
+def run(key):
+    global player_x
+    global player_y
+
+    # Handle the new keypress
+    process_input(key)
+
+    # Draw the title screen
+    if constants.game_state['mode'] == 'menu':
+        engine.draw_buf(title.data, (0, 0))
+        constants.game_state['mode'] = 'intro'
+
+    # Play the intro cutscene
+    elif constants.game_state['mode'] == 'intro':
         # Draw a text box
-        self.draw_text_box(5, 10, 21, 5,
-            text = "   Roses are red,\n  Violets are cool.\n I love text boxes,\nThey're a good tool.",
-            fill = True
+        engine.draw_text_box(0, 0, 79, 4,
+            text = "       -- W E L C O M E   T O   P O R K   A N D   A D V E N T U R E! --       \n"
+                   "             wasd to move, space to select, e for inventory.                  \n"
+                   "                         Press space to continue",
+            fill = True,
+
+            delay = 0.02
         )
+        constants.game_state['mode'] = 'main'
 
-    def move_dvd(self):
-        self.dvd_pos_x += self.dvd_speed_x
-        self.dvd_pos_y += self.dvd_speed_y
+    # Map movement
+    elif constants.game_state['mode'] == 'main':
+        # Draw Maps
+        collision = enemy.check_collision((player_y,player_x))
+        if type(collision) == int:
+            engine.draw_buf(battlescreen.data)
+            constants.game_state['mode'] = 'battle_transition'
+            battle.start_battle(collision)
+        else:
+            engine.draw_enemies(enemy.enemies)
+            engine.draw_buf(maze.maze, (0,1))
+            engine.plot(constants.PLAYER_CHAR, (1 + player_y, 3 + 2 * player_x))
+            enemy.move_enemies()
 
-        if self.dvd_pos_x <= 0 or self.dvd_pos_x >= self.width - self.DVD.w:
-            self.dvd_speed_x = -self.dvd_speed_x
-        if self.dvd_pos_y <= 0 or self.dvd_pos_y >= self.height - self.DVD.h:
-            self.dvd_speed_y = -self.dvd_speed_y
+    # Disable input in first frame of battle
+    elif constants.game_state['mode'] == 'battle_transition':
+        battle.battle()
+        constants.game_state['mode'] = 'battle'
 
-    def move_man(self, x, y):
-        # Move x chars horizontally and y chars vertically
-        self.man_pos_x += 2*x
-        self.man_pos_y += y
+    # Battle scene
+    elif constants.game_state['mode'] == 'battle':
+        battle.battle()
 
-        # Move back inside screen
-        if self.man_pos_x < 0:
-            self.man_pos_x = 0
-        elif self.man_pos_x > self.width - self.man.w:
-            self.man_pos_x = self.width - self.man.w
+    # Screen when you win the battle
+    elif constants.game_state['mode'] == 'win_screen':
+        constants.game_state['mode'] = 'main'
 
-        if self.man_pos_y < 0:
-            self.man_pos_y = 0
-        elif self.man_pos_y > self.height - self.man.h:
-            self.man_pos_y = self.height - self.man.h
+        # Won the floor!
+        if len(enemy.enemies) == 0:
+            # Reset everything
+            constants.game_state['mode'] = 'next_floor'
+            constants.game_state['level'] += 1
+            maze.regen_maze((4,4))
+            enemy.enemies = enemy.generate_enemies()
+            player_x = 0
+            player_y = 0
+
+    # Levelup screen
+    elif constants.game_state['mode'] == 'next_floor':
+        engine.draw_buf(levelup.data)
+        constants.game_state['mode'] = 'main'
+
+    # You succ lol
+    elif constants.game_state['mode'] == 'lose_screen':
+        engine.draw_text_box(0,0,79,4, text= "                             B O O   Y O U   D I E D")
+
+    # Don't run away boo
+    elif constants.game_state['mode'] == 'run_screen':
+        engine.draw_text_box(0,0,79,4, text= "                              ran away successfully!")
+        constants.game_state['mode'] = 'main'
+
+    # Bag state
+    elif constants.game_state['mode'] == 'bag':
+        inventory.draw_inventory()
+
+    # Draw the screen to the terminal
+    engine.draw()
+
+# Images!
+title = image.convert('images/title.txt')
+battlescreen = image.convert('images/battlescreen.txt')
+levelup = image.convert('images/levelup.txt')
+
+player_x = 0
+player_y = 0
 
 if __name__ == '__main__':
-    game = Game()
+    try:
+        run(b' ')
 
-    # initial draw call
-    game.do_graphics()
-    game.draw()
-    # Run indenfinitely.
-    while (1):
-        game.run(input('> '))
+        while (1):
+            run(getch.getch())
+    except KeyboardInterrupt:
+        sys.exit()
