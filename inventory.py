@@ -80,21 +80,21 @@ def select():
 	print (selected)
 
 	if len(loot_together) == 0:
-		return
+	    return
 
 	# Eat food
-	elif loot_together[selected][1] == 'food':
-		battle.player_health = min(battle.player_health + loot_together[selected][2], battle.player_max_health)
-		battle.player_food[loot_together[selected]] -= 1
-		if (battle.player_food[loot_together[selected]] == 0):
-			selected = max(selected - 1, 0)
+	if loot_together[selected][1] == 'food':
+	    battle.player_health = min(battle.player_health + loot_together[selected][2], battle.player_max_health)
+	    battle.player_food[loot_together[selected]] -= 1
+	    if (battle.player_food[loot_together[selected]] == 0):
+	        selected = max(selected - 1, 0)
 
-	# Equip armour
+		# Equip armour
 	elif loot_together[selected][1] == 'hat':
-		battle.current_head = loot_together[selected]
+	    battle.current_head = loot_together[selected]
 	elif loot_together[selected][1] == 'body':
-		battle.current_body = loot_together[selected]
+	    battle.current_body = loot_together[selected]
 	elif loot_together[selected][1] == 'legs':
-		battle.current_legs = loot_together[selected]
+	    battle.current_legs = loot_together[selected]
 	elif loot_together[selected][1] == 'weapon':
-		battle.current_weapon = loot_together[selected]
+	    battle.current_weapon = loot_together[selected]
