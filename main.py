@@ -107,7 +107,7 @@ def run(key):
     elif constants.game_state['mode'] == 'main':
         # Draw Maps
         collision = enemy.check_collision((player_y,player_x))
-        if type(collision) == int:
+        if type(collision) is int:
             engine.draw_buf(battlescreen.data)
             constants.game_state['mode'] = 'battle_transition'
             battle.start_battle(collision)
