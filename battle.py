@@ -61,7 +61,7 @@ player_max_health = constants.START_MAX_HEALTH
 
 # Food and equipment
 player_food = Counter()
-player_equip = set({})
+player_equip = set()
 
 # Items the player is currently wearing
 current_head = ('nothing', 'hat', 0)
