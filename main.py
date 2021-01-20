@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import numpy as np
 import sys
 
 import maze
@@ -13,8 +12,6 @@ import getch
 import inventory
 
 import constants
-
-import random
 
 # Handle input from the terminal
 def process_input(command):

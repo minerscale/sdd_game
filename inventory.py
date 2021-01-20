@@ -1,6 +1,4 @@
 import engine
-import inventory
-import constants
 import image
 import battle
 

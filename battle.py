@@ -4,7 +4,6 @@ from math import floor
 import image
 import constants 
 import random
-import inventory
 
 from collections import Counter
 
